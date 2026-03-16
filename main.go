@@ -7,8 +7,8 @@ import (
 )
 
 func generatePrice() float64 {
-	var newprice = float64(20000 + rand.Intn(50001))
-	return newprice
+	var newPrice = float64(20000 + rand.Intn(50001))
+	return newPrice
 }
 
 type Account struct {
@@ -23,7 +23,7 @@ func readCmd() string {
 	return cmd
 }
 
-func (u *Account) funcBuy(price *float64, oldprice *float64) {
+func (u *Account) funcBuy(price *float64, oldPrice *float64) {
 	var usdt float64
 	fmt.Println("-------------------")
 	fmt.Println("Введите сумму в USDT: ")
@@ -35,17 +35,17 @@ func (u *Account) funcBuy(price *float64, oldprice *float64) {
 		u.BalanceBTC += btcBought
 		u.BalanceUSDT -= usdt
 		fmt.Printf("✅ Куплено %.8f BTC\n", btcBought)
-		*oldprice = *price
+		*oldPrice = *price
 		*price = generatePrice()
-		procentPrice := ((*price - *oldprice) / *oldprice) * 100
+		percentPrice := ((*price - *oldPrice) / *oldPrice) * 100
 		time.Sleep(1000 * time.Millisecond)
-		fmt.Print("💰 Цена обновилась!\n", *oldprice, " --- ")
-		fmt.Printf("%.2f%% ---> ", procentPrice)
+		fmt.Print("💰 Цена обновилась!\n", *oldPrice, " --- ")
+		fmt.Printf("%.2f%% ---> ", percentPrice)
 		fmt.Printf("%.f \n", *price)
 	}
 }
 
-func (u *Account) funcSell(price *float64, oldprice *float64) {
+func (u *Account) funcSell(price *float64, oldPrice *float64) {
 	var usdt float64
 	fmt.Println("--------------------")
 	fmt.Println("Введите сумму в USDT: ")
@@ -58,20 +58,20 @@ func (u *Account) funcSell(price *float64, oldprice *float64) {
 		u.BalanceUSDT += usdt
 		fmt.Printf("✅ Продано %.8f BTC\n", needBTC)
 		ptrOldPrice := *price
-		*oldprice = ptrOldPrice
+		*oldPrice = ptrOldPrice
 		*price = generatePrice()
-		procentPrice := ((*price - *oldprice) / *oldprice) * 100
+		percentPrice := ((*price - *oldPrice) / *oldPrice) * 100
 		time.Sleep(1000 * time.Millisecond)
-		fmt.Print("💰 Цена обновилась!\n", *oldprice, " --- ")
-		fmt.Printf("%.2f%% ---> ", procentPrice)
+		fmt.Print("💰 Цена обновилась!\n", *oldPrice, " --- ")
+		fmt.Printf("%.2f%% ---> ", percentPrice)
 		fmt.Printf("%.f \n", *price)
 	}
 }
 
 func (u Account) funcBalance(price float64) {
 	stats := ((((u.BalanceBTC * price) + u.BalanceUSDT) - 1000) / 1000) * 100
-	allbalance := (u.BalanceBTC * price) + u.BalanceUSDT
-	fmt.Printf("💎 Общий баланс: ~ %.2f USDT\n", allbalance)
+	allBalance := (u.BalanceBTC * price) + u.BalanceUSDT
+	fmt.Printf("💎 Общий баланс: ~ %.2f USDT\n", allBalance)
 	fmt.Println("💵 USDT: ", u.BalanceUSDT, "USDT")
 	fmt.Printf("🪙  BTC: %.8f", u.BalanceUSDT)
 	fmt.Printf(" (~ %.2f USDT)\n", (u.BalanceBTC * price))
@@ -99,7 +99,7 @@ func (u Account) funcExit(price float64) {
 func main() {
 	user := Account{BalanceUSDT: 1000}
 	price := generatePrice()
-	oldprice := price
+	oldPrice := price
 	var cmd string
 	fmt.Println("--------------------")
 	fmt.Println("Добрый день! Ты попал на мини биржу!")
@@ -113,9 +113,9 @@ func main() {
 		fmt.Println("--------------------")
 		switch cmd {
 		case "Buy", "buy":
-			user.funcBuy(&price, &oldprice)
+			user.funcBuy(&price, &oldPrice)
 		case "Sell", "sell":
-			user.funcSell(&price, &oldprice)
+			user.funcSell(&price, &oldPrice)
 		case "Balance", "balance":
 			user.funcBalance(price)
 		case "Exit", "exit":
